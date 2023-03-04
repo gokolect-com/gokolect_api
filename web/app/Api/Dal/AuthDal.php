@@ -52,7 +52,7 @@ class AuthDal extends DataOps
             unset($data['action']);
             self::$_input_data = $data;
         }
-        die(var_dump($_SERVER));
+        
         $this->_host_url = $_SERVER['HTTP_HOST'];
         // $this->_host_url = $_SERVER['HTTP_ORIGIN']."/myhtmlclass";
 
