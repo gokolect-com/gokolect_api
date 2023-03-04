@@ -1,0 +1,16 @@
+vendor/
+.env
+.env.test
+.htaccess234
+app.json
+.config
+phpunit.xml
+symfony.lock
+rave-2022-09-08.log
+rave-2022-09-09.log
+Procfile
+tests/
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
