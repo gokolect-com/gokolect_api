@@ -198,66 +198,80 @@ class PaymentDal extends DataOps
         static::$table = "gk_donations_tbl";
         static::$pk = "tx_ref";
 
-        $data = self::$_input_data;
-        if ($data['status'] === "successful") {
-            $url = "https://api.flutterwave.com/v3/transactions/{$data["transaction_id"]}/verify";
+        if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
+            exit(header(self::BAD_REQUEST));          
+        }
+        
+        $jwt = $matches[1];
+        if (empty($matches) || empty($jwt)) {
+            exit(header(self::BAD_REQUEST));
+        }
+        $item = explode('_', base64_decode($jwt));
+        $verify_jwt = self::$_utility->decodeJWTToken($item[3], $item[0]);
+        if ($verify_jwt->valid) {
+                
+            $data = self::$_input_data;
+            if ($data['status'] === "successful") {
+                $url = "https://api.flutterwave.com/v3/transactions/{$data["transaction_id"]}/verify";
 
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_SSLVERIFYPEER, 0);
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 2);
-            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+                $curl = curl_init();
+                curl_setopt($curl, CURLOPT_SSLVERIFYPEER, 0);
+                curl_setopt($curl, CURLOPT_URL, $url);
+                curl_setopt($curl, CURLOPT_RETURNTRANSFER, 2);
+                curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
 
-            curl_setopt($curl, CURLOPT_HTTPHEADER, [
-                "Authorization: Bearer {$_SERVER["SECRET_KEY"]}",
-                "Content-Type: application/json"
-            ]);
+                curl_setopt($curl, CURLOPT_HTTPHEADER, [
+                    "Authorization: Bearer {$_SERVER["SECRET_KEY"]}",
+                    "Content-Type: application/json"
+                ]);
 
-            $result = curl_exec($curl);
+                $result = curl_exec($curl);
 
-            $error = curl_error($curl);
-            if ($error) {
-                $response = json_encode($error);
-            }
-            curl_close($curl);
-            $response_data = json_decode($result);
-            if ($response_data->status === "success" && $response_data->data->status === "successful") {
+                $error = curl_error($curl);
+                if ($error) {
+                    $response = json_encode($error);
+                }
+                curl_close($curl);
+                $response_data = json_decode($result);
+                if ($response_data->status === "success" && $response_data->data->status === "successful") {
 
-                $saveable_data = [
-                    "transaction_id"=>$response_data->data->transaction_id,
-                    "tx_ref"=>$response_data->data->tx_ref,
-                    "flw_ref"=>$response_data->data->flw_ref,
-                    "device_fingerprint"=>$response_data->data->device_fingerprint,
-                    "charged_amount"=>$response_data->data->charged_amount,
-                    "app_fee"=>$response_data->data->app_fee,
-                    "merchant_fee"=>$response_data->data->merchant_fee,
-                    "processor_response"=>$response_data->data->processor_response,
-                    "auth_model"=>$response_data->data->auth_model,
-                    "ip"=>$response_data->data->ip,
-                    "narration"=>$response_data->data->narration,
-                    "status"=>$response_data->data->status,
-                    "payment_type"=>$response_data->data->payment_type,
-                    "account_id"=>$response_data->data->account_id,
-                    "amount_settled"=>$response_data->data->amount_settled,
-                    "first_6digits"=>$response_data->data->card->first_6digits,
-                    "last_4digits"=>$response_data->data->card->last_4digits,
-                    "issuer"=>$response_data->data->card->issuer,
-                    "type"=>$response_data->data->card->type,
-                    "token"=>$response_data->data->card->token,
-                    "expiry"=>$response_data->data->card->expiry,
-                    "transaction_country"=>$response_data->data->card->country,
-                    "don_id"=>$response_data->data->id,
-                    "payment_date"=>$response_data->data->created_at
-                ];
-                $check = static::findOne(['tx_ref'=> $response_data->data->tx_ref]);
-                if ($check) {
-                    $save = self::update($saveable_data);
-                } else {
-                    $save = self::save($saveable_data);
+                    $saveable_data = [
+                        "transaction_id"=>$response_data->data->transaction_id,
+                        "tx_ref"=>$response_data->data->tx_ref,
+                        "flw_ref"=>$response_data->data->flw_ref,
+                        "device_fingerprint"=>$response_data->data->device_fingerprint,
+                        "charged_amount"=>$response_data->data->charged_amount,
+                        "app_fee"=>$response_data->data->app_fee,
+                        "merchant_fee"=>$response_data->data->merchant_fee,
+                        "processor_response"=>$response_data->data->processor_response,
+                        "auth_model"=>$response_data->data->auth_model,
+                        "ip"=>$response_data->data->ip,
+                        "narration"=>$response_data->data->narration,
+                        "status"=>$response_data->data->status,
+                        "payment_type"=>$response_data->data->payment_type,
+                        "account_id"=>$response_data->data->account_id,
+                        "amount_settled"=>$response_data->data->amount_settled,
+                        "first_6digits"=>$response_data->data->card->first_6digits,
+                        "last_4digits"=>$response_data->data->card->last_4digits,
+                        "issuer"=>$response_data->data->card->issuer,
+                        "type"=>$response_data->data->card->type,
+                        "token"=>$response_data->data->card->token,
+                        "expiry"=>$response_data->data->card->expiry,
+                        "transaction_country"=>$response_data->data->card->country,
+                        "don_id"=>$response_data->data->id,
+                        "payment_date"=>$response_data->data->created_at
+                    ];
+                    $check = static::findOne(['tx_ref'=> $response_data->data->tx_ref]);
+                    if ($check) {
+                        $save = self::update($saveable_data);
+                    } else {
+                        $save = self::save($saveable_data);
+                    }
                 }
             }
+        } else {
+            exit(header("HTTP/1.1 500 Internal Server Error <br> You are not allowed to access this page"));
         }
-
         return $response;
     }
 
