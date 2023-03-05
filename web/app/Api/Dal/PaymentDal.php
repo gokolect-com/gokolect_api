@@ -2,7 +2,7 @@
 
 namespace Gokolect\Api\Dal;
 /**
- * Gokolect Items Data Access Layer class. 
+ * Gokolect Payment Class. 
  * Holds all attributes and methods of class.
  * 
  * PHP Version 8.1.3
@@ -11,7 +11,7 @@ namespace Gokolect\Api\Dal;
  * @package  Gokolect_API_Service
  * @author   Tamunobarasinipiri Samuel Joseph <joseph.samuel@cinfores.com>
  * @license  MIT License
- * @link     https://PollJota.idea.cinfores.com
+ * @link     https://gokolect.com
  */
 
 session_start();
@@ -22,11 +22,6 @@ define("BASEPATH", 1);
 
 use Gokolect\Api\Utility;
 use Gokolect\Data\DataOps;
-
-use Flutterwave\EventHandlers\EventHandlerInterface;
-use Flutterwave\Rave;
-
-
 
 /**
  * Gokolect Items Data Access Layer Class.
@@ -43,12 +38,11 @@ use Flutterwave\Rave;
 class PaymentDal extends DataOps
 {
     private static $_input_data;
-    private static $_input_file;
     private $_host_url = null;
     private static $_utility = null;
     private const BAD_REQUEST = "HTTP/1.0 400 Bad Request";
     private static $_payment = null;
-    private static $_prefix = "GK"; // Change this to the name of your business or app
+    private static $_prefix = "gkt_"; // Change this to the name of your business or app
     private static $_overrideRef = false;
 
     /**
@@ -59,7 +53,7 @@ class PaymentDal extends DataOps
      * 
      * @return array
      */
-    public function __construct(array $data = null, array $files = null)
+    public function __construct(array $data = null)
     {        
         if (!is_null($data)) {
             unset($data['action']);
@@ -70,10 +64,7 @@ class PaymentDal extends DataOps
         }
 
         $this->_host_url = $_SERVER['HTTP_HOST']."/gokolect_api/";
-        self::$_utility = new Utility();
-        if (!is_null($_FILES)) {
-            self::$_input_file = $_FILES;
-        }        
+        self::$_utility = new Utility();                
     }
 
     /**
@@ -100,18 +91,18 @@ class PaymentDal extends DataOps
      * 
      * @return array
      */
-    public function generateRef()
+    private static function generateRef()
     {   
         static::$table = "gk_donations_tbl";
         static::$pk = "id";
         $count = self::countAll();
         $lastId = self::lastSavedId();
         if ($count <= 0) {
-            $count = 0000001;
+            $count = 1;
         } else {
             $count = $count + 1;
         }
-        $payRef = date('dmYHis').$count;
+        $payRef = uniqid(static::$_prefix).$count;
         return [
             'statuscode' => 0, 
             'status' => 'token created '. $lastId, 
@@ -129,8 +120,11 @@ class PaymentDal extends DataOps
     public function processPayments()
     {
         static::$table = "gk_donations_tbl";
-        static::$pk = "item_code";
-        
+        static::$pk = "id";
+        $response = array();
+
+        $rof = $postData['amount'] - (10.05 * 100);
+
         if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             exit(header(self::BAD_REQUEST));          
         }
@@ -143,82 +137,54 @@ class PaymentDal extends DataOps
         $verify_jwt = self::$_utility->decodeJWTToken($item[3], $item[0]);
         if ($verify_jwt->valid) {
 
-            $URL = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+            $ref = self::generateRef();
+            $post_url = "https://api.flutterwave.com/v3/payments";
 
-            $getData = $_GET;
-            $postData = $_POST;
-            $publicKey = $_SERVER['PUBLIC_KEY'];
-            $secretKey = $_SERVER['SECRET_KEY'];
-            if (isset($_POST) && isset($postData['successurl']) && isset($postData['failureurl'])) {
-                $success_url = $postData['successurl'];
-                $failure_url = $postData['failureurl'];
-            }
+            $name = self::$_input_data["lastname"]." ".self::$_input_data["firstname"];
 
-            $env = $_SERVER['ENV'];
+            $post_data = array(
+                "tx_ref"=>$ref["data"],
+                "currency"=> self::$_input_data["currency"],
+                "amount"=>self::$_input_data["amount"],
+                "customer"=>array(
+                    "name"=>$name,
+                    "email"=>self::$_input_data["email"],
+                    "phone_number"=>self::$_input_data["phonenumber"]
+                ),
+                "customizations"=>array(
+                    "title"=>"Gokolect Donations Window",
+                    "description"=>"Your support to social kindness and global charity",
+                    "logo"=>"https://bootqlass.com/gokolect_api/assets/img/Gokolectlogo 1.png"
+                ),
 
-            if (isset($postData['amount'])) {
-                $_SESSION['publicKey'] = $publicKey;
-                $_SESSION['secretKey'] = $secretKey;
-                $_SESSION['env'] = $env;
-                $_SESSION['successurl'] = $success_url;
-                $_SESSION['failureurl'] = $failure_url;
-                $_SESSION['currency'] = $postData['currency'];
-                $_SESSION['amount'] = $postData['amount'];
-            }            
+                "meta"=>array(
+                    "first_name"=>self::$_input_data["firstname"],
+                    "last_name"=>self::$_input_data["lastname"],
+                    "reason"=> "Making the world a better place by engaging people in social kindness.",
+                    "comment"=> self::$_input_data["comment"]
+                ),
 
-            // Uncomment here to enforce the useage of your own ref else a ref will be generated for you automatically
-            if (isset($postData['ref'])) {
-                self::$_prefix = $postData['ref'];
-                self::$_overrideRef = true;
-            }
-            
-            self::$_payment = new Rave($_SESSION['secretKey'], self::$_prefix, self::$_overrideRef);
-            
-            if (isset($postData['amount'])) {
-                // Make payment
-                // $rof = $postData['amount'] - (10.05 * 100);
-                self::$_payment
-                    ->eventHandler(new MyEventHandler)
-                    ->setAmount($postData['amount'])
-                    ->setPaymentOptions($postData['payment_options']) // value can be card, account or both
-                    ->setDescription($postData['description'])
-                    ->setLogo($postData['logo'])
-                    ->setTitle($postData['title'])
-                    ->setCountry($postData['country'])
-                    ->setCurrency($postData['currency'])
-                    ->setEmail($postData['email'])
-                    ->setFirstname($postData['firstname'])
-                    ->setLastname($postData['lastname'])
-                    ->setPhoneNumber($postData['phonenumber'])
-                    ->setPayButtonText($postData['pay_button_text'])
-                    ->setRedirectUrl($URL)
-                    // ->setMetaData(array('rof' => $rof, 'badge' => 'Awesome')) // can be called multiple times. Uncomment this to add meta datas
-                    // ->setMetaData(array('metaname' => 'SomeOtherDataName', 'metavalue' => 'SomeOtherValue')) // can be called multiple times. Uncomment this to add meta datas
-                    ->initialize();
-                    // $response = self::$_payment;
-            } else {
-                if (isset($getData['cancelled'])) {
-                    // Handle canceled payments
-                    self::$_payment
-                        ->eventHandler(new MyEventHandler)
-                        ->paymentCanceled($getData['cancelled']);
-                } elseif (isset($getData['tx_ref'])) {
-                    // Handle completed payments
-                    self::$_payment->logger->notice('Payment completed. Now requerying payment.');
-                    self::$_payment
-                        ->eventHandler(new MyEventHandler)
-                        ->requeryTransaction($getData['transaction_id']);
-                } else {
-                    self::$_payment->logger->warn('Stop!!! Please pass the txref parameter!');
-                    // $response = ["statuscode" => -1, "status" => 'Stop!!! Please pass the txref parameter!'];
-                    echo "na so";
-                }
-            }
+                "redirect_url"=>"https://bootqlass.com/gokolect_api?action=verify_payment"
+            );
+
+            $result = self::handleCURL($post_data, $post_url);
+            $saveable_data = [
+                "firstname"=>$result->data->firstname,
+                "lastname"=>$result->data->lastname,
+                "email"=>$response_ult->email,
+                "phonenumber"=>$result->data->phonenumber,
+                "country"=>$result->data->country,
+                "currency"=>$result->data->currency,
+                "amount"=>$result->data->amount,
+                "comment"=>$result->data->comment,
+                "tx_ref"=>$result->data->tx_ref
+            ];
+            $save = self::save($saveable_data);
+            $response = $result->data->link;            
         } else {
-            header("HTTP/1.1 500 Internal Server Error");
-            exit(0);
+            exit(header("HTTP/1.1 500 Internal Server Error <br> You are not allowed to access this page"));
         }
-        // return $response;
+        return $response;
     }
 
     /**
@@ -227,15 +193,111 @@ class PaymentDal extends DataOps
      * 
      * @return array
      */
-    public function processPaymentResponse()
+    public function verifyPayments()
     {
-        $handle_event = new MyEventHandler;
+        static::$table = "gk_donations_tbl";
+        static::$pk = "tx_ref";
+
         $data = self::$_input_data;
         if ($data['status'] === "successful") {
-            $response = $handle_event->onSuccessful($data);
+            $url = "https://api.flutterwave.com/v3/transactions/{$data["transaction_id"]}/verify";
+
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_SSLVERIFYPEER, 0);
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 2);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+
+            curl_setopt($curl, CURLOPT_HTTPHEADER, [
+                "Authorization: Bearer {$_SERVER["SECRET_KEY"]}",
+                "Content-Type: application/json"
+            ]);
+
+            $result = curl_exec($curl);
+
+            $error = curl_error($curl);
+            if ($error) {
+                $response = json_encode($error);
+            }
+            curl_close($curl);
+            $response_data = json_decode($result);
+            if ($response_data->status === "success" && $response_data->data->status === "successful") {
+
+                $saveable_data = [
+                    "transaction_id"=>$response_data->data->transaction_id,
+                    "tx_ref"=>$response_data->data->tx_ref,
+                    "flw_ref"=>$response_data->data->flw_ref,
+                    "device_fingerprint"=>$response_data->data->device_fingerprint,
+                    "charged_amount"=>$response_data->data->charged_amount,
+                    "app_fee"=>$response_data->data->app_fee,
+                    "merchant_fee"=>$response_data->data->merchant_fee,
+                    "processor_response"=>$response_data->data->processor_response,
+                    "auth_model"=>$response_data->data->auth_model,
+                    "ip"=>$response_data->data->ip,
+                    "narration"=>$response_data->data->narration,
+                    "status"=>$response_data->data->status,
+                    "payment_type"=>$response_data->data->payment_type,
+                    "account_id"=>$response_data->data->account_id,
+                    "amount_settled"=>$response_data->data->amount_settled,
+                    "first_6digits"=>$response_data->data->card->first_6digits,
+                    "last_4digits"=>$response_data->data->card->last_4digits,
+                    "issuer"=>$response_data->data->card->issuer,
+                    "type"=>$response_data->data->card->type,
+                    "token"=>$response_data->data->card->token,
+                    "expiry"=>$response_data->data->card->expiry,
+                    "transaction_country"=>$response_data->data->card->country,
+                    "don_id"=>$response_data->data->id,
+                    "payment_date"=>$response_data->data->created_at
+                ];
+                $check = static::findOne(['tx_ref'=> $response_data->data->tx_ref]);
+                if ($check) {
+                    $save = self::update($saveable_data);
+                } else {
+                    $save = self::save($saveable_data);
+                }
+            }
         }
 
         return $response;
+    }
+
+
+    /**
+     * Handle CURL Operation Method.
+     * Handles CURL Operation and returns response based on given parameters
+     * 
+     * @param array $post_data
+     * @param array $post_url
+     * 
+     * @return array
+     */
+    private static function handleCURL(Array $post_data, Array $post_url)
+    {
+        $curl = curl_init();
+
+        curl_setup($curl, CURLOPT_SSL_VEIRFYPEER, 0);
+
+        curl_setup($curl, CURLOPT_URL, $post_url);
+        
+        curl_setup($curl, CURLOPT_POST, 1);
+        
+        curl_setup($curl, CURLOPT_POSTFIELDS, json_encode($post_data));
+
+        curl_setup($curl, CURLOPT_RETURNTRANSFER, true);
+
+        curl_setup($curl, CURLOPT_CONNECTTIMEOUT, 200);
+
+        curl_setup($curl, CURLOPT_TIMEOUT, 200);
+
+        curl_setup($curl, CURLOPT_HTTPHEADER, array(
+            "Authorization: Bearer ". $_SERVER["SECRET_KEY"],
+            "Content-Type: application/json",
+            "Cache-Control: no-cache"
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        return json_decode($response);
     }
     
 }

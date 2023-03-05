@@ -253,6 +253,7 @@ class Schemas
                 amount DECIMAL(12,2) DEFAULT NULL,
                 currency VARCHAR(20) DEFAULT NULL,
                 transaction_id VARCHAR(200) DEFAULT NULL,
+                transaction_country VARCHAR(200) DEFAULT NULL,
                 tx_ref VARCHAR(200) DEFAULT NULL,
                 flw_ref VARCHAR(200) DEFAULT NULL,
                 device_fingerprint VARCHAR(200) DEFAULT NULL,
@@ -265,7 +266,6 @@ class Schemas
                 narration VARCHAR(1000) DEFAULT NULL,
                 status VARCHAR(200) DEFAULT NULL,
                 payment_type VARCHAR(200) DEFAULT NULL,
-                card_created_at VARCHAR(200) DEFAULT NULL,
                 account_id VARCHAR(200) DEFAULT NULL,
                 amount_settled VARCHAR(200) DEFAULT NULL,
                 first_6digits VARCHAR(200) DEFAULT NULL,
@@ -276,8 +276,9 @@ class Schemas
                 expiry VARCHAR(200) DEFAULT NULL,
                 don_id VARCHAR(200) DEFAULT NULL,
                 payment_date VARCHAR(200) DEFAULT NULL,
+                comment LONGTEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                modified TIMESTAMP,
                 PRIMARY KEY(id)
             ) ENGINE = InnoDB DEFAULT CHARSET =utf8;
             ";

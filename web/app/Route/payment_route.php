@@ -25,18 +25,13 @@ error_reporting(E_ALL);
  * @return json
  */
 function paymentRouter(array $data = null)
-{ 
-    $file = null;
-    if (isset($_FILES)) {
-        $file = $_FILES;
-    }
-    
-    $user_object = new PaymentBll($data, $file);
+{
+    $user_object = new PaymentBll($data);
 
     switch($data['action']) {
         
     case "make_payment":
-         include_once __DIR__ .DIRECTORY_SEPARATOR."../payment/payment.php";
+         
         break;    
         
     case "generate_ref_payment":
