@@ -45,15 +45,11 @@ class PaymentBll
      * 
      * @return array
      */
-    public function __construct(array $data = null, array $files = null)
+    public function __construct(array $data = null)
     {        
         if (!is_null($data)) {
             unset($data['action']);
             self::$_input_data = $data;
-        }   
-
-        if (!is_null($files)) {
-            self::$_input_file = $files;
         }                
     }
 
@@ -77,8 +73,14 @@ class PaymentBll
      */
     public function processPayment()
     {
-        $items = new PaymentDal();
-        return $items->ProcessPayments();
+        $validation = self::_validateInputData(self::$_input_data);
+        if ($validation['error']) {
+            $response = ['statuscode' => -1, 'status' => $validated['errormsg']];
+        } else {
+            $data = $validated['my_post'];
+            $response = new PaymentDal($data);
+            return $response->ProcessPayments();
+        }
     }
     
     /**
@@ -87,10 +89,16 @@ class PaymentBll
      * 
      * @return mix
      */
-    public function returnResponsePayment()
+    public function verifyPayment()
     {
-        $items = new PaymentDal();
-        return $items->processPaymentResponse();
+        $validation = self::_validateVerificationData(self::$_input_data);
+        if ($validation['error']) {
+            $response = ['statuscode' => -1, 'status' => $validated['errormsg']];
+        } else {
+            $data = $validated['my_post'];
+            $response = new PaymentDal($data);
+            return $response->verifyPayments();
+        }
     }
     
     /**
@@ -107,34 +115,103 @@ class PaymentBll
 
         $validator = new \GUMP;
         $rules = null;   
-        $mypost = $data;
+        $myPost = $data;
 
-        $mypost = $validator->sanitize($mypost);
+        $myPost = $validator->sanitize($myPost);
 
         $filters = array(
-            'item_code' => 'trim|sanitize_string'
+            'firstname' => 'trim|sanitize_string',
+            'lastname' => 'trim|sanitize_string',
+            'email' => 'trim|sanitize_string',
+            'phonenumber' => 'trim|sanitize_string',
+            'amount' => 'trim|sanitize_string',
+            'currency' => 'trim|sanitize_string',
+            'country' => 'trim|sanitize_string',
+            'comment' => 'trim|sanitize_string',
         );
-        $mypost = $validator->filter($mypost, $filters);
+        $myPost = $validator->filter($myPost, $filters);
         
         $rules = array(
-            'item_code' => 'required|min_len,3|max_len,200'
+            'firstname' => 'required|min_len,3|max_len,200',
+            'lastname' => 'required|min_len,3|max_len,200',
+            'email' => 'required|min_len,3|max_len,200',
+            'phonenumber' => 'required|min_len,8|max_len,14',
+            'amount' => 'required|numeric',
+            'currency' => 'required|min_len,2',
+            'country' => 'required|min_len,2',
+            'comment' => 'min_len,5',
         );
                
 
-        $validated = $validator->validate($mypost, $rules);
+        $validated = $validator->validate($myPost, $rules);
         if ($validated === true) {
             $return = array(
                 'post' => $data,
                 'error' => false,
                 'errormsg' => "",
-                'my_post' => $mypost
+                'my_post' => $myPost
             );
         } else {
             $return = array(
                 'post' => $data,
                 'error' => true,
                 'errormsg' => $validator->get_readable_errors(),
-                'my_post' => $mypost
+                'my_post' => $myPost
+            );
+        }
+        return $return;
+    }
+    
+    /**
+     * Validate input data method
+     * Validates input data from user to create account
+     * 
+     * @param object $dataSet input data to validate
+     * 
+     * @return object
+     */
+    private function _validateVerificationData($dataSet)
+    {
+        $data = (array) $dataSet;   
+
+        $validator = new \GUMP;
+        $rules = null;   
+        $myPost = $data;
+
+        $myPost = $validator->sanitize($myPost);
+
+        $filters = array(
+            'transaction_id' => 'trim|sanitize_string',
+            'status' => 'trim|sanitize_string',
+            'tx_ref' => 'trim|sanitize_string',
+            'currency' => 'trim|sanitize_string',
+            'amount' => 'trim|sanitize_string',
+        );
+        $myPost = $validator->filter($myPost, $filters);
+        
+        $rules = array(
+            'transaction_id' => 'required|min_len,3|max_len,200',
+            'status' => 'required|min_len,3|max_len,200',
+            'tx_ref' => 'required|min_len,3|max_len,200',
+            'currency' => 'required|min_len,8|max_len,14',
+            'amount' => 'required|numeric',
+        );
+               
+
+        $validated = $validator->validate($myPost, $rules);
+        if ($validated === true) {
+            $return = array(
+                'post' => $data,
+                'error' => false,
+                'errormsg' => "",
+                'my_post' => $myPost
+            );
+        } else {
+            $return = array(
+                'post' => $data,
+                'error' => true,
+                'errormsg' => $validator->get_readable_errors(),
+                'my_post' => $myPost
             );
         }
         return $return;
