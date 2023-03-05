@@ -17,8 +17,6 @@ namespace Gokolect\Api;
 use Gokolect\Api\Dal\PaymentDal;
 use Gokolect\GUMP;
 
-require_once __DIR__."/JWTConfig.php";
-
 /**
  * PollJota Admin class holds all attributes of the Administration functionalities
  * Admin Class
