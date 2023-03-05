@@ -59,9 +59,6 @@ class PaymentDal extends DataOps
             unset($data['action']);
             self::$_input_data = $data;
         }
-        if (!is_null($files)) {
-            self::$_input_file = $files;
-        }
 
         $this->_host_url = $_SERVER['HTTP_HOST']."/gokolect_api/";
         self::$_utility = new Utility();                
@@ -91,7 +88,7 @@ class PaymentDal extends DataOps
      * 
      * @return array
      */
-    private static function generateRef()
+    public static function generateRef()
     {   
         static::$table = "gk_donations_tbl";
         static::$pk = "id";
@@ -215,7 +212,7 @@ class PaymentDal extends DataOps
                 $url = "https://api.flutterwave.com/v3/transactions/{$data["transaction_id"]}/verify";
 
                 $curl = curl_init();
-                curl_setopt($curl, CURLOPT_SSLVERIFYPEER, 0);
+                curl_setopt($curl, CURLOPT_SSLVERIFYPEER, 1);
                 curl_setopt($curl, CURLOPT_URL, $url);
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 2);
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
@@ -289,7 +286,7 @@ class PaymentDal extends DataOps
     {
         $curl = curl_init();
 
-        curl_setup($curl, CURLOPT_SSL_VEIRFYPEER, 0);
+        curl_setup($curl, CURLOPT_SSL_VEIRFYPEER, 1);
 
         curl_setup($curl, CURLOPT_URL, $post_url);
         
