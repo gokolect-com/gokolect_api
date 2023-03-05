@@ -1,22 +1,38 @@
 {        
-    "package_name": "Gokolect_api",
-    "package_type": "project",
-    "desc": "A social good app to help givers easily reach out to people in need",
+    "name": "gokolect/gokolect-api-services",
+    "version": "1.0.0",
+    "type": "application",
+    "description": "A social good app to help givers easily reach out to people in need",
+    "authors": [
+        {
+            "name": "Samuel Joseph Tamunobarasinipiri",
+            "email": "josephsamuelw1@gmail.com",
+            "homepage": "https://www.bootqlass.com",
+            "role": "Developer"
+        }
+    ],
     "keywords": [
         "give",
         "collect",
         "kolect",
         "givers",
         "giver",
-        "need"
+        "need",
+        "gift",
+        "social kindness",
+        "kindness",
+        "social good"
     ],
-    "license_name": "MIT License",
+    "license": "MIT",
+    "support": {
+        "email": "bootqlass@gmail.com",
+        "irc": "irc://irc.freenode.org/composer"
+    },
     "require": {
         "vlucas/phpdotenv": "^5.4",
         "phpmailer/phpmailer": "^6.0",
         "nowakowskir/php-jwt": "^2.0.1",
         "predis/predis": "^1.1",
-        "symfony/flex": "^2.0.4",
         "monolog/monolog": "^2.0",
         "twig/twig": "^2.0",
         "symfony/twig-bridge": "^3",
