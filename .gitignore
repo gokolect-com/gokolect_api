@@ -2,6 +2,7 @@ vendor/
 .env
 .env.test
 .htaccess234
+.htaccess
 app.json
 .config
 phpunit.xml
