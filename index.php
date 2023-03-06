@@ -17,17 +17,17 @@ ini_set('display_errors', 1);
  * @link     https://gokolect.test
  */
  // Allow from any origin
-if (isset($_SERVER['HTTP_ORIGIN'])) {
+// if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: *");
     header("Access-Control-Expose-Headers: Content-Length, X-JSON");
-    // header("Content-Type: application/json; charset=UTF-8");
+    header("Content-Type: application/json; charset=UTF-8");
     header('Access-Control-Allow-Credentials: true');
     header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
     header("Access-Control-Max-Age: 3600");
     header("Access-Control-Allow-Headers:Origin, Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, accept, ");
     header("Access-Control-Allow-Headers:Origin, Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, accept, X-Auth-Token");
     header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
-}
+// }
 
 // Access-Control headers are received during OPTIONS requests
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS' || $_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'GET') {
