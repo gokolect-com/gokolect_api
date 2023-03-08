@@ -285,22 +285,22 @@ class PaymentDal extends DataOps
     private static function handleCURL(Array $post_data, String $post_url)
     {
         $curl = curl_init();
-
-        curl_setup($curl, CURLOPT_SSL_VEIRFYPEER, 1);
-
-        curl_setup($curl, CURLOPT_URL, $post_url);
         
-        curl_setup($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_SSL_VEIRFYPEER, 1);
+
+        curl_setopt($curl, CURLOPT_URL, $post_url);
         
-        curl_setup($curl, CURLOPT_POSTFIELDS, json_encode($post_data));
+        curl_setopt($curl, CURLOPT_POST, 1);
+        
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($post_data));
 
-        curl_setup($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-        curl_setup($curl, CURLOPT_CONNECTTIMEOUT, 200);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 200);
 
-        curl_setup($curl, CURLOPT_TIMEOUT, 200);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 200);
 
-        curl_setup($curl, CURLOPT_HTTPHEADER, array(
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
             "Authorization: Bearer ". $_SERVER["SECRET_KEY"],
             "Content-Type: application/json",
             "Cache-Control: no-cache"
