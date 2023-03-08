@@ -278,7 +278,7 @@ class PaymentDal extends DataOps
      * Handles CURL Operation and returns response based on given parameters
      * 
      * @param array $post_data
-     * @param array $post_url
+     * @param string $post_url
      * 
      * @return array
      */
