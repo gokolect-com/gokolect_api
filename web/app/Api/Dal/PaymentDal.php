@@ -286,8 +286,8 @@ class PaymentDal extends DataOps
     {
         $curl = curl_init();
         
-        curl_setopt($curl, CURLOPT_SSL_VEIRFYPEER, 1);
-
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
+        
         curl_setopt($curl, CURLOPT_URL, $post_url);
         
         curl_setopt($curl, CURLOPT_POST, 1);
