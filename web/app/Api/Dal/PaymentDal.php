@@ -161,11 +161,11 @@ class PaymentDal extends DataOps
                     "comment"=> self::$_input_data["comment"]
                 ),
 
-                "redirect_url"=>"https://bootqlass.com/gokolect_api?action=verify_payment"
+                "redirect_url"=>"https://gokolectapp.bootqlass.com/?action=verify_payment"
             );
 
             $result = self::handleCURL($post_data, $post_url);
-            die(var_dump($result, $post_data));
+            die(var_dump($result));
             $saveable_data = [
                 "firstname"=>$result->data->firstname,
                 "lastname"=>$result->data->lastname,
