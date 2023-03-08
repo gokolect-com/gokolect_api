@@ -137,7 +137,8 @@ class PaymentDal extends DataOps
 
         if ($verify_jwt->valid) {
 
-            $post_url = "https://api.flutterwave.com/v3/payments";
+            // $post_url = "https://api.flutterwave.com/v3/payments";
+            $post_url = "https://api.flutterwave.com/v3/charges?type=card";
 
             $name = self::$_input_data["lastname"]." ".self::$_input_data["firstname"];
 
