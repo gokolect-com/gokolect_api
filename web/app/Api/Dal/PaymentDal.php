@@ -119,6 +119,7 @@ class PaymentDal extends DataOps
         static::$table = "gk_donations_tbl";
         static::$pk = "id";
         $response = array();
+        $ref = self::generateRef();
 
         // $rof = $postData['amount'] - (10.05 * 100);
 
@@ -133,7 +134,6 @@ class PaymentDal extends DataOps
         $item = explode('_', base64_decode($jwt));
         $verify_jwt = self::$_utility->decodeJWTToken($item[3], $item[0]);
         
-        $ref = self::generateRef();
 
         if ($verify_jwt->valid) {
 
