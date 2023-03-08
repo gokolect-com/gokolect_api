@@ -160,22 +160,21 @@ class PaymentDal extends DataOps
                     "reason"=> "Making the world a better place by engaging people in social kindness.",
                     "comment"=> self::$_input_data["comment"]
                 ),
-
                 "redirect_url"=>"https://gokolectapp.bootqlass.com/?action=verify_payment"
             );
 
             $result = self::handleCURL($post_data, $post_url);
-            die(var_dump($result));
+            
             $saveable_data = [
-                "firstname"=>$result->data->firstname,
-                "lastname"=>$result->data->lastname,
-                "email"=>$response_ult->email,
-                "phonenumber"=>$result->data->phonenumber,
-                "country"=>$result->data->country,
-                "currency"=>$result->data->currency,
-                "amount"=>$result->data->amount,
-                "comment"=>$result->data->comment,
-                "tx_ref"=>$result->data->tx_ref
+                "firstname"=>self::$_input_data["firstname"],
+                "lastname"=>self::$_input_data["lastname"],
+                "email"=>self::$_input_data["email"],
+                "phonenumber"=>self::$_input_data["phonenumber"],
+                "country"=>self::$_input_data["country"],
+                "currency"=>self::$_input_data["currency"],
+                "amount"=>self::$_input_data["amount"],
+                "comment"=>self::$_input_data["comment"],
+                "tx_ref"=>self::$_input_data["tx_ref"]
             ];
             $save = self::save($saveable_data);
             $response = $result->data->link;            
