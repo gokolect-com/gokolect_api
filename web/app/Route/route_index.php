@@ -37,7 +37,7 @@ if (is_dir(__DIR__."/")) {
 }
 if ($requestMethod == "POST") {
     $data = $_POST;
-    die(var_dump($requestMethod, $data));
+    
     $explode = explode("_", $data['action']);
     $route = end($explode);
     
