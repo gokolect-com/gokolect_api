@@ -26,7 +26,6 @@ header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Conte
 
 header('content-type: application/json; charset=utf-8');
 
-die(var_dump($_POST));
 if (isset($_POST['action']) || isset($_GET['action'])) {        
     include_once __DIR__ ."/web/app/Route/route_index.php";    
 } else {
