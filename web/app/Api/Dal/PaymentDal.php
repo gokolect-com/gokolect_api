@@ -179,8 +179,7 @@ class PaymentDal extends DataOps
                 "tx_ref"=>$ref["data"]
             ];
             $save = self::save($saveable_data);
-            // $response = $result->data->link;  
-            header("Location: ".$result->data->link);          
+            $response = $result->data->link;        
         } else {
             exit(header("HTTP/1.1 500 Internal Server Error <br> You are not allowed to access this page"));
         }
@@ -288,7 +287,7 @@ class PaymentDal extends DataOps
     private static function handleCURL(Array $post_data, String $post_url)
     {
         $curl = curl_init();
-        
+        die(var_dump($_SERVER, $_SERVER["SECRET_KEY"]));
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
         
         curl_setopt($curl, CURLOPT_URL, $post_url);
