@@ -132,9 +132,11 @@ class PaymentDal extends DataOps
         }
         $item = explode('_', base64_decode($jwt));
         $verify_jwt = self::$_utility->decodeJWTToken($item[3], $item[0]);
+        
+        $ref = self::generateRef();
+
         if ($verify_jwt->valid) {
 
-            $ref = self::generateRef();
             $post_url = "https://api.flutterwave.com/v3/payments";
 
             $name = self::$_input_data["lastname"]." ".self::$_input_data["firstname"];
