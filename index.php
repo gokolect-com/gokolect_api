@@ -24,7 +24,7 @@ header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Methods: HEAD, GET, POST, PUT, PATCH, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method,Access-Control-Request-Headers, Authorization");
 
-header('content-type: application/json; charset=utf-8');
+header('Content-Type: application/json');
 
 if (isset($_POST['action']) || isset($_GET['action'])) {        
     include_once __DIR__ ."/web/app/Route/route_index.php";    
