@@ -54,7 +54,7 @@ class ItemsDal extends DataOps
         if (!is_null($files)) {
             self::$_input_file = $files;
         }
-        $this->_host_url = $_SERVER['HTTP_HOST']."/gokolect_api/web/index.php";
+        $this->_host_url = $_SERVER['HTTP_HOST'];
         self::$_utility = new Utility();
 
         if (!is_null($_FILES)) {
@@ -71,7 +71,7 @@ class ItemsDal extends DataOps
     public function setGeneralToken()
     {
         session_start();
-        $id = strtotime(date('Y-m-d'));
+        $id = strtotime(date('Y')).uniqid();
         $hash = password_hash('gokolect@2022~', PASSWORD_DEFAULT);
         $details1 = ['user_id'=>$id, 'extra'=>session_id(), 'schema'=>self::$table, 'email'=>$hash];
 
