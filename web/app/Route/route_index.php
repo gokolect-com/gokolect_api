@@ -35,9 +35,9 @@ if (is_dir(__DIR__."/")) {
     header("HTTP/1.1 401 Unauthorized");
     exit('Unauthorized');
 }
-die(var_dump($requestMethod));
 if ($requestMethod == "POST") {
     $data = $_POST;
+    die(var_dump($requestMethod, $data));
     $explode = explode("_", $data['action']);
     $route = end($explode);
     
