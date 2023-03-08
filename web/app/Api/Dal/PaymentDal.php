@@ -120,7 +120,7 @@ class PaymentDal extends DataOps
         static::$pk = "id";
         $response = array();
 
-        $rof = $postData['amount'] - (10.05 * 100);
+        // $rof = $postData['amount'] - (10.05 * 100);
 
         if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
             exit(header(self::BAD_REQUEST));          
