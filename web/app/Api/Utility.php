@@ -513,13 +513,13 @@ class Utility
     /**
      * Generate jwt token
      * Generates a jwt token based on given parameters
-     * 
+     *
      * @param array $data the data to generate token
-     * 
-     * @return object    
+     *
+     * @return object
      */
     public function generateJWTToken(array $data = null)
-    {  
+    {
         $request_data = JWT_DATA;
         if (!is_null($data)) {
             $request_data['userName'] = $data['user_id'];
@@ -533,17 +533,17 @@ class Utility
     /**
      * Decode jwt token
      * Decodes a jwt token based on received jwt token from client's request
-     * 
+     *
      * @param array $token   the data to generate token.
      * @param array $user_id the data to generate token.
-     * 
-     * @return object    
+     *
+     * @return object
      */
     public function decodeJWTToken(string $token = null, string $user_id = null)
     {
         $jwt = json_encode($token);
         $tokenEncoded = new TokenEncoded($jwt);
-        $now = NOW_DATE;
+        
         $serverName = rawurldecode(parse_url($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], PHP_URL_PATH));
         // $leeway = 500;
         // $tokenEncoded->validate(PUBLIC_KEY, JWT::ALGORITHM_RS256, $leeway);
@@ -551,9 +551,9 @@ class Utility
        
             $token = (object) $tokenEncoded->decode()->getPayload();
             
-            if ($token->iss == $serverName
-                && $token->nbf < $now->getTimestamp() 
-                && $token->exp > $now->getTimestamp() 
+            if ($token->iss === $serverName
+                && $token->nbf === $token->iat
+                && $token->exp > $token->iat
                 && $token->userName == $user_id
             ) {
                 $token->valid = true;
@@ -561,8 +561,8 @@ class Utility
             } else {
                 $token->valid = false;
                 $response = $token;
-            }    
-        } catch(Exception $e) {
+            }
+        } catch (Exception $e) {
             $response = $e->getMessage();
         }
         return $response;
