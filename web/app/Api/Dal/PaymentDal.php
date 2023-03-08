@@ -165,7 +165,7 @@ class PaymentDal extends DataOps
             );
 
             $result = self::handleCURL($post_data, $post_url);
-            die(var_dump($result, $post_data, $post_url));
+            die(var_dump($result, $post_data));
             $saveable_data = [
                 "firstname"=>$result->data->firstname,
                 "lastname"=>$result->data->lastname,
