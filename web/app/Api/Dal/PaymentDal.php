@@ -179,8 +179,7 @@ class PaymentDal extends DataOps
                 "tx_ref"=>$ref["data"]
             ];
             $save = self::save($saveable_data);
-            // $response = $result->data->link;  
-            header("Location: ".$result->data->link);          
+            $response = $result->data->link;        
         } else {
             exit(header("HTTP/1.1 500 Internal Server Error <br> You are not allowed to access this page"));
         }
