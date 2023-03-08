@@ -174,7 +174,7 @@ class PaymentDal extends DataOps
                 "currency"=>self::$_input_data["currency"],
                 "amount"=>self::$_input_data["amount"],
                 "comment"=>self::$_input_data["comment"],
-                "tx_ref"=>self::$_input_data["tx_ref"]
+                "tx_ref"=>self::$ref["data"]
             ];
             $save = self::save($saveable_data);
             $response = $result->data->link;            
