@@ -282,7 +282,7 @@ class PaymentDal extends DataOps
      * 
      * @return array
      */
-    private static function handleCURL(Array $post_data, Array $post_url)
+    private static function handleCURL(Array $post_data, String $post_url)
     {
         $curl = curl_init();
 
