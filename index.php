@@ -19,13 +19,10 @@ ini_set('display_errors', 1);
  // Allow from any origin
 
 // header("Access-Control-Allow-Headers: Authorization, Content-Type");
-// header("Access-Control-Allow-Origin: *");
 
 header('Access-Control-Allow-Origin: *');
-
-header('Access-Control-Allow-Methods: GET, POST');
-
-header("Access-Control-Allow-Headers: X-Requested-With");
+header("Access-Control-Allow-Methods: HEAD, GET, POST, PUT, PATCH, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method,Access-Control-Request-Headers, Authorization");
 
 header('content-type: application/json; charset=utf-8');
 
