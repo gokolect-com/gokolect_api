@@ -232,8 +232,8 @@ class PaymentDal extends DataOps
                 }
                 curl_close($curl);
                 $response_data = json_decode($result);
-                die(var_dump($response_data, $response_data->status, $response_data->data->status));
-                if ($response_data->status === "success" && $response_data->data->status === "successful") {                    
+                // die(var_dump($response_data, $response_data->status, $response_data->data->status));
+                if ($response_data->status == "success" && $response_data->data->status == "successful" AND $response_data->data->id = $data["transaction_id"]) {                    
                     $saveable_data = [
                         "transaction_id"=>$response_data->data->id,
                         "tx_ref"=>$response_data->data->tx_ref,
@@ -264,13 +264,17 @@ class PaymentDal extends DataOps
                     $check = static::findOne(['tx_ref'=> $response_data->data->tx_ref]);
                     if ($check) {
                         if (self::update($saveable_data)) {
-                            $response = ["statuscode" => 0, "status" => "Thank you for your donation"];
+                            // $response = ["statuscode" => 0, "status" => "Thank you for your donation"];
+                            header("Location: ". $_SERVER['HTTP_ORIGIN']."/dontation_success.html");
+                            exit();
                         } else {
                             $response = ["statuscode" =>-1, "status" => "Unable to complete your donation at the moment"];
                         }
                     } else {                        
                         if (self::save($saveable_data)) {
-                            $response = ["statuscode" => 0, "status" => "Thank you for your donation"];
+                            // $response = ["statuscode" => 0, "status" => "Thank you for your donation"];
+                            header("Location: ". $_SERVER['HTTP_ORIGIN']."/dontation_success.html");
+                            exit();
                         } else {
                             $response = ["statuscode" =>-1, "status" => "Unable to complete your donation at the moment"];
                         }
