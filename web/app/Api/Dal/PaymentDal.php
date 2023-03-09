@@ -233,7 +233,7 @@ class PaymentDal extends DataOps
                 curl_close($curl);
                 $response_data = json_decode($result);
                 if ($response_data->status === "success" && $response_data->data->status === "successful") {
-
+                    die(var_dump($response_data));
                     $saveable_data = [
                         "transaction_id"=>$response_data->data->transaction_id,
                         "tx_ref"=>$response_data->data->tx_ref,
