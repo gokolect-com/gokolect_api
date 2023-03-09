@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "type": "application",
     "description": "A social good app to help givers easily reach out to people in need",
+    "repository": "https://github.com/gokolect-com/gokolect_api.git",
     "authors": [
         {
             "name": "Samuel Joseph Tamunobarasinipiri",

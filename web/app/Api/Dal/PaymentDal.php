@@ -232,8 +232,7 @@ class PaymentDal extends DataOps
                 }
                 curl_close($curl);
                 $response_data = json_decode($result);
-                if ($response_data->status === "success" && $response_data->data->status === "successful") {
-                    die(var_dump($response_data));
+                if ($response_data->status === "success" && $response_data->data->status === "successful") {                    
                     $saveable_data = [
                         "transaction_id"=>$response_data->data->id,
                         "tx_ref"=>$response_data->data->tx_ref,
@@ -263,15 +262,13 @@ class PaymentDal extends DataOps
                     ];
                     $check = static::findOne(['tx_ref'=> $response_data->data->tx_ref]);
                     if ($check) {
-                        $update = self::update($saveable_data);
-                        if ($update) {
+                        if (self::update($saveable_data)) {
                             $response = ["statuscode" => 0, "status" => "Thank you for your donation"];
                         } else {
                             $response = ["statuscode" =>-1, "status" => "Unable to complete your donation at the moment"];
                         }
-                    } else {
-                        $save = self::save($saveable_data);
-                        if ($save) {
+                    } else {                        
+                        if (self::save($saveable_data)) {
                             $response = ["statuscode" => 0, "status" => "Thank you for your donation"];
                         } else {
                             $response = ["statuscode" =>-1, "status" => "Unable to complete your donation at the moment"];
