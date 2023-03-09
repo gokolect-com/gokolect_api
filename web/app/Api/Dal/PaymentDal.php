@@ -196,7 +196,7 @@ class PaymentDal extends DataOps
     {
         static::$table = "gk_donations_tbl";
         static::$pk = "tx_ref";
-
+        $response = array();
         // if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
         //     exit(header(self::BAD_REQUEST));          
         // }
@@ -262,11 +262,25 @@ class PaymentDal extends DataOps
                     ];
                     $check = static::findOne(['tx_ref'=> $response_data->data->tx_ref]);
                     if ($check) {
-                        $save = self::update($saveable_data);
+                        $update = self::update($saveable_data);
+                        if ($update) {
+                            $response = ["statuscode" => 0, "status" => "Thank you for your donation"];
+                        } else {
+                            $response = ["statuscode" =>-1, "status" => "Unable to complete your donation at the moment"];
+                        }
                     } else {
                         $save = self::save($saveable_data);
+                        if ($save) {
+                            $response = ["statuscode" => 0, "status" => "Thank you for your donation"];
+                        } else {
+                            $response = ["statuscode" =>-1, "status" => "Unable to complete your donation at the moment"];
+                        }
                     }
+                } else {
+                    $response = ["statuscode" =>-1, "status" => "error", "data" =>$response_data];
                 }
+            } else {
+                $response = ["statuscode" =>-1, "status" => "error", "data" =>$data];
             }
         // } else {
         //     exit(header("HTTP/1.1 500 Internal Server Error <br> You are not allowed to access this page"));
