@@ -232,7 +232,7 @@ class PaymentDal extends DataOps
                 }
                 curl_close($curl);
                 $response_data = json_decode($result);
-                // die(var_dump($response_data, $response_data->status, $response_data->data->status));
+                
                 if ($response_data->status == "success" && $response_data->data->status == "successful" AND $response_data->data->id = $data["transaction_id"]) {                    
                     $saveable_data = [
                         "transaction_id"=>$response_data->data->id,
@@ -304,7 +304,6 @@ class PaymentDal extends DataOps
     private static function handleCURL(Array $post_data, String $post_url)
     {
         $curl = curl_init();
-        // die(var_dump($_SERVER, $_SERVER["SECRET_KEY"]));
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
         
         curl_setopt($curl, CURLOPT_URL, $post_url);
