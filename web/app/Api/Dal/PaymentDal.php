@@ -197,17 +197,17 @@ class PaymentDal extends DataOps
         static::$table = "gk_donations_tbl";
         static::$pk = "tx_ref";
 
-        if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
-            exit(header(self::BAD_REQUEST));          
-        }
+        // if (! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
+        //     exit(header(self::BAD_REQUEST));          
+        // }
         
-        $jwt = $matches[1];
-        if (empty($matches) || empty($jwt)) {
-            exit(header(self::BAD_REQUEST));
-        }
-        $item = explode('_', base64_decode($jwt));
-        $verify_jwt = self::$_utility->decodeJWTToken($item[3], $item[0]);
-        if ($verify_jwt->valid) {
+        // $jwt = $matches[1];
+        // if (empty($matches) || empty($jwt)) {
+        //     exit(header(self::BAD_REQUEST));
+        // }
+        // $item = explode('_', base64_decode($jwt));
+        // $verify_jwt = self::$_utility->decodeJWTToken($item[3], $item[0]);
+        // if ($verify_jwt->valid) {
                 
             $data = self::$_input_data;
             if ($data['status'] === "successful") {
@@ -268,9 +268,9 @@ class PaymentDal extends DataOps
                     }
                 }
             }
-        } else {
-            exit(header("HTTP/1.1 500 Internal Server Error <br> You are not allowed to access this page"));
-        }
+        // } else {
+        //     exit(header("HTTP/1.1 500 Internal Server Error <br> You are not allowed to access this page"));
+        // }
         return $response;
     }
 
