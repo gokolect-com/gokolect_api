@@ -91,9 +91,9 @@ class PaymentBll
     {
         $validation = self::_validateVerificationData(self::$_input_data);
         if ($validation['error']) {
-            $response = ['statuscode' => -1, 'status' => $validated['errormsg']];
+            $response = ['statuscode' => -1, 'status' => $validation['errormsg']];
         } else {
-            $data = $validated['my_post'];
+            $data = $validation['my_post'];
             $response = new PaymentDal($data);
             return $response->verifyPayments();
         }
