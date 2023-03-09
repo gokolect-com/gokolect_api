@@ -90,6 +90,7 @@ class PaymentBll
     public function verifyPayment()
     {
         $validation = self::_validateVerificationData(self::$_input_data);
+        die(var_dump($validation, self::$_input_data));
         if ($validation['error']) {
             $response = ['statuscode' => -1, 'status' => $validation['errormsg']];
         } else {
