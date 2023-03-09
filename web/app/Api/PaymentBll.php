@@ -76,9 +76,10 @@ class PaymentBll
             $response = ['statuscode' => -1, 'status' => $validation['errormsg']];
         } else {
             $data = $validation['my_post'];
-            $response = new PaymentDal($data);
-            return $response->ProcessPayments();
+            $result = new PaymentDal($data);
+            $response = $result->ProcessPayments();
         }
+        return $response;
     }
     
     /**
@@ -89,15 +90,15 @@ class PaymentBll
      */
     public function verifyPayment()
     {
-        $validation = self::_validateVerificationData(self::$_input_data);
-        die(var_dump($validation, self::$_input_data));
+        $validation = self::_validateVerificationData(self::$_input_data);        
         if ($validation['error']) {
             $response = ['statuscode' => -1, 'status' => $validation['errormsg']];
         } else {
             $data = $validation['my_post'];
-            $response = new PaymentDal($data);
-            return $response->verifyPayments();
+            $result = new PaymentDal($data);
+            $response = $result->verifyPayments();
         }
+        return $response;
     }
     
     /**
@@ -182,18 +183,14 @@ class PaymentBll
         $filters = array(
             'transaction_id' => 'trim|sanitize_string',
             'status' => 'trim|sanitize_string',
-            'tx_ref' => 'trim|sanitize_string',
-            'currency' => 'trim|sanitize_string',
-            'amount' => 'trim|sanitize_string',
+            'tx_ref' => 'trim|sanitize_string'
         );
         $myPost = $validator->filter($myPost, $filters);
         
         $rules = array(
             'transaction_id' => 'required|min_len,3|max_len,200',
             'status' => 'required|min_len,3|max_len,200',
-            'tx_ref' => 'required|min_len,3|max_len,200',
-            'currency' => 'required|min_len,8|max_len,14',
-            'amount' => 'required|numeric',
+            'tx_ref' => 'required|min_len,3|max_len,200'
         );
                
 
