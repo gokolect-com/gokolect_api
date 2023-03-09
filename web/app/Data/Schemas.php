@@ -274,7 +274,7 @@ class Schemas
                 type VARCHAR(200) DEFAULT NULL,
                 token VARCHAR(1000) DEFAULT NULL,
                 expiry VARCHAR(200) DEFAULT NULL,
-                don_id VARCHAR(200) DEFAULT NULL,
+                customer_id VARCHAR(200) DEFAULT NULL,
                 payment_date VARCHAR(200) DEFAULT NULL,
                 comment LONGTEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

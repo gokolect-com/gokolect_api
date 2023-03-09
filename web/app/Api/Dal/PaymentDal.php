@@ -235,7 +235,7 @@ class PaymentDal extends DataOps
                 if ($response_data->status === "success" && $response_data->data->status === "successful") {
                     die(var_dump($response_data));
                     $saveable_data = [
-                        "transaction_id"=>$response_data->data->transaction_id,
+                        "transaction_id"=>$response_data->data->id,
                         "tx_ref"=>$response_data->data->tx_ref,
                         "flw_ref"=>$response_data->data->flw_ref,
                         "device_fingerprint"=>$response_data->data->device_fingerprint,
@@ -258,7 +258,8 @@ class PaymentDal extends DataOps
                         "expiry"=>$response_data->data->card->expiry,
                         "transaction_country"=>$response_data->data->card->country,
                         "don_id"=>$response_data->data->id,
-                        "payment_date"=>$response_data->data->created_at
+                        "payment_date"=>$response_data->data->created_at,
+                        "customer_id"=>$response_data->data->customer->id
                     ];
                     $check = static::findOne(['tx_ref'=> $response_data->data->tx_ref]);
                     if ($check) {
