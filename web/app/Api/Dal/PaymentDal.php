@@ -256,7 +256,7 @@ class PaymentDal extends DataOps
                         "token"=>$response_data->data->card->token,
                         "expiry"=>$response_data->data->card->expiry,
                         "transaction_country"=>$response_data->data->card->country,
-                        "don_id"=>$response_data->data->id,
+                        "customer_id"=>$response_data->data->customer->id,
                         "payment_date"=>$response_data->data->created_at,
                         "customer_id"=>$response_data->data->customer->id
                     ];
