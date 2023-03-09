@@ -214,7 +214,7 @@ class PaymentDal extends DataOps
                 $url = "https://api.flutterwave.com/v3/transactions/{$data["transaction_id"]}/verify";
 
                 $curl = curl_init();
-                curl_setopt($curl, CURLOPT_SSLVERIFYPEER, 1);
+                curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
                 curl_setopt($curl, CURLOPT_URL, $url);
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, 2);
                 curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
@@ -228,7 +228,7 @@ class PaymentDal extends DataOps
 
                 $error = curl_error($curl);
                 if ($error) {
-                    $response = json_encode($error);
+                    $response = json_decode($error);
                 }
                 curl_close($curl);
                 $response_data = json_decode($result);
