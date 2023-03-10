@@ -115,6 +115,7 @@ class AuthDal extends DataOps
             
             $sent_email = $this->_utility->sendEmailNotification($notification); 
             
+            die(var_dump($sent_email));
             if (self::getConnection()) { 
                 if ($sent_email) {      
                     $data_array = array(
@@ -126,7 +127,6 @@ class AuthDal extends DataOps
                     );         
                              
                     $stmt = static::save($data_array);
-                   
                     if ($stmt) {
                         $result = self::findOne(['email'=> $data['email']]);
                         if ($result) {
