@@ -111,7 +111,7 @@ class Utility
     private static function _dirt($dir)
     {
         $new_dir = str_replace(' ', '', $dir);
-        $applpicsdir = 'http://gokolecttest.bootqlass.com/gokolect_fileserver/';
+        $applpicsdir = 'http://gokolecttest.bootqlass.com/server/';
 
         if (!is_dir($applpicsdir)) {
             $applpicsdir = "file_server/app_files/";
@@ -269,6 +269,7 @@ class Utility
             );
 
             $result = self::uploadToServer($_FILE, $data['id'], $dir, $imageFileType);
+            die(var_dump($result));
             if ($result) {
                 $response = [
                     'status' => $result['status'], 
