@@ -109,14 +109,14 @@ class AuthDal extends DataOps
                 'message'=>$message,
                 'email'=>$data['email'],
                 'name'=>$full_name,
-                'sender' => 'josephsamuelw1@zohomail.com',
+                'sender' => 'gokolect_info@bootqlass.com',
                 'appName' => 'Gokolect Focussed on social Kindness'
             );
             
             $sent_email = $this->_utility->sendEmailNotification($notification); 
             
             die(var_dump($sent_email));
-            
+
             if (self::getConnection()) { 
                 if ($sent_email) {      
                     $data_array = array(
