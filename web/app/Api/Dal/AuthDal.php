@@ -93,7 +93,9 @@ class AuthDal extends DataOps
             $token = base64_encode($details."_".(string) $jwt);
             
             $message = "<div style='display:flex; flex-direction:column; width:70%; height:auto; position:relative; box-sizing:border-box; background:#f0f0f0; font-family:sans-serif,arial;'><div style='width: 100%; padding: 10px; background:#2ECC71; margin:0; box-sizing:border-box; display:flex; flex-direction:column; align-items:center; justify-content:center;'><h1 style='color: #fff; font-weight: bold;'>Gokolect</h1><p>We are focussed in promoting Social Kindness all around the world.</p></div>";
+
             $message.="<section style='padding:2.5rem; display:flex; flex-direction:column; background:#fcfcfc;box-sizing:border-box; width:100%;'><h4 style='color: #4f4f4f; margin:15px 0;'>Hi ".$fullName.",</h4>";
+
             $message.="<p>You have received this email because you signed up with us on 
             <a href='https://gokolect.com'>Gokolect</a> 
             please click on the button bellow to verify your email and activate your account. </p><br/>";
@@ -101,6 +103,19 @@ class AuthDal extends DataOps
             $message.="<a href='".$this->_host_url."/verify_signup.html?token=".$token."&note=".$edate."' style='padding: 15px; border-radius:15px; width: 200px; background:#EA2027; color:#fff; margin:0 auto; box-sizing:border-box; text-align:center; text-decoration:none; font-size:14px; font-weight:bold; box-shadow:0px 0px 2px rgba(0, 0, 0, 0.5);'>VERIFY</a></section></div>";
 
             $message.="<hr /><div style='color: #4f4f4f; margin:15px;'><p>If you did not sign up with us, please ignore this email.</p></div>";
+
+            $message = "<!DOCTYPE html>
+            <html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>Document</title></head><body style='margin:0; padding:0;'><main style='display:flex; flex-direction:column; width:70%; height:100vh; position:relative; box-sizing:border-box; background:#fff; font-family:sans-serif,arial;'><div style='width: 100%; padding: 25px; background:#2ECC71; margin:0; box-sizing:border-box; display:flex; align-items:center; justify-content:space-between;'><h1 style='color: #fff; font-weight: bold;'>Gokolect</h1><p style='color:#fff;'>We are focussed in promoting Social Kindness all around the world.</p></div><section style='padding:2.5rem; display:flex; flex-direction:column; box-sizing:border-box; width:100%; justify-content:center; align-items:flex-start'><h4 style='color: #4f4f4f; margin:15px 0;'>Hi ".$fullName.",</h4>
+            <p>You have received this email because you signed up with us on 
+                    <a href='https://gokolect.com'>Gokolect</a> 
+                    please click on the button bellow to verify your email and activate your account. </p><br/>
+                    
+                    <a href='".$this->_host_url."/verify_signup.html?token=".$token."&note=".$edate."' style='padding: 15px; border-radius:25px; width: 200px; background:crimson; color:#fff; box-sizing:border-box; text-decoration:none; font-size:14px; font-weight:bold; box-shadow:0px 0px 2px rgba(0, 0, 0, 0.5); outline: none; align-self: self-start; text-align:center;'>VERIFY</a></section>
+            
+                    <div style='color: #4f4f4f; margin:15px;'><p>If you did not sign up with us, please ignore this email.</p></div>
+                </main>
+            </body>
+            </html>";
             
             $email_subj = "Gokolect Email Verification";
             $full_name = $data['first_name'] . " " . $data['last_name'];
@@ -113,9 +128,7 @@ class AuthDal extends DataOps
                 'appName' => 'Gokolect Focussed on social Kindness'
             );
             
-            $sent_email = $this->_utility->sendEmailNotification($notification); 
-            
-            die(var_dump($sent_email));
+            $sent_email = $this->_utility->sendEmailNotification($notification);
 
             if (self::getConnection()) { 
                 if ($sent_email == true) {      
