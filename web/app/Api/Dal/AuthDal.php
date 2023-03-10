@@ -118,7 +118,7 @@ class AuthDal extends DataOps
             die(var_dump($sent_email));
 
             if (self::getConnection()) { 
-                if ($sent_email) {      
+                if ($sent_email == true) {      
                     $data_array = array(
                         "first_name"=>$data['first_name'],
                         "last_name"=>$data['last_name'],
