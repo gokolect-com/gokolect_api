@@ -92,7 +92,7 @@ class AuthDal extends DataOps
            
             $token = base64_encode($details."_".(string) $jwt);
             
-            $message = "<div style='display:flex; width:70%; height:auto; position:relative; box-sizing:border-box; background:#f0f0f0; font-family:sans-serif,arial;'><div style='width: 100%; padding: 10px; background:#2ECC71; margin:0; box-sizing:border-box; display:flex; align-items:center; justify-content:center;'><h1 style='color: #fff; font-weight: bold;'>Gokolect</h1></div>";
+            $message = "<div style='display:flex; flex-direction:column; width:70%; height:auto; position:relative; box-sizing:border-box; background:#f0f0f0; font-family:sans-serif,arial;'><div style='width: 100%; padding: 10px; background:#2ECC71; margin:0; box-sizing:border-box; display:flex; flex-direction:column; align-items:center; justify-content:center;'><h1 style='color: #fff; font-weight: bold;'>Gokolect</h1><p>We are focussed in promoting Social Kindness all around the world.</p></div>";
             $message.="<section style='padding:2.5rem; display:flex; flex-direction:column; background:#fcfcfc;box-sizing:border-box; width:100%;'><h4 style='color: #4f4f4f; margin:15px 0;'>Hi ".$fullName.",</h4>";
             $message.="<p>You have received this email because you signed up with us on 
             <a href='https://gokolect.com'>Gokolect</a> 
