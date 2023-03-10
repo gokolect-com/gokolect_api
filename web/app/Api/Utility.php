@@ -68,7 +68,8 @@ class Utility
             );                                         //Send using SMTP
             // $mail->Host       = 'ssl://smtp.gmail.com';                 //Set the SMTP server to send through
             // $mail->Host = 'smtp.zoho.com:465';                     //Set the SMTP server to send through
-            $mail->Host = 'smtp.hostinger.com';                     //Set the SMTP server to send through
+            // $mail->Host = 'smtp.hostinger.com';                     //Set the SMTP server to send through
+            $mail->Host = 'ssl://smtp.titan.email';                     //Set the SMTP server to send through
             $mail->SMTPAuth = true;                                   //Enable SMTP authentication
             // $mail->Username = 'josephsamuelw1@zohomail.com';                     //SMTP username
             $mail->Username = 'gokolect_info@bootqlass.com';                     //SMTP username
