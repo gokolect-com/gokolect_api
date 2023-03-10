@@ -56,7 +56,7 @@ class Utility
         $response = "";
         try {
             // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-            $mail->SMTPDebug = 2;                      //Enable verbose debug output
+            $mail->SMTPDebug = 0;                      //Enable verbose debug output
             $mail->isSMTP();   
             $mail->Mailer = 'smtp';
             $mail->SMTPOptions = array(
