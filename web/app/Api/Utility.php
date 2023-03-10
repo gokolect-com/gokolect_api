@@ -56,30 +56,32 @@ class Utility
         $response = "";
         try {
             // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-            // $mail->SMTPDebug = 4;                      //Enable verbose debug output
+            $mail->SMTPDebug = 2;                      //Enable verbose debug output
             $mail->isSMTP();   
             $mail->Mailer = 'smtp';
             $mail->SMTPOptions = array(
                 'ssl' => array(
-                'verify_peer' => false,
-                'verify_peer_name' => false,
+                'verify_peer' => true,
+                'verify_peer_name' => true,
                 'allow_self_signed' => true
                 )
             );                                         //Send using SMTP
             // $mail->Host       = 'ssl://smtp.gmail.com';                 //Set the SMTP server to send through
-            $mail->Host = 'smtp.zoho.com:465';                     //Set the SMTP server to send through
+            // $mail->Host = 'smtp.zoho.com:465';                     //Set the SMTP server to send through
+            $mail->Host = 'smtp.hostinger.com';                     //Set the SMTP server to send through
             $mail->SMTPAuth = true;                                   //Enable SMTP authentication
-            $mail->Username = 'josephsamuelw1@zohomail.com';                     //SMTP username
+            // $mail->Username = 'josephsamuelw1@zohomail.com';                     //SMTP username
+            $mail->Username = 'gokolect_info@bootqlass.com';                     //SMTP username
             $mail->Password = 'jos57atg@0806';                               //SMTP password
             // $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
             $mail->SMTPSecure = "ssl";            //Enable implicit TLS encryption
-            $mail->Port = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`           
+            $mail->Port = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`           
 
             //Recipients
             $mail->setFrom($data->sender, $data->appName);
             $mail->addAddress($data->email, $data->name);     //Add a recipient
             $mail->addAddress($data->email);               //Name is optional
-            $mail->addReplyTo('josephsamuelw1@zohomail.com', 'Notification');
+            $mail->addReplyTo('gokolect_info@bootqlass.com', 'Notification');
             // $mail->addCC('cc@example.com');
             // $mail->addBCC('bcc@example.com');
 
