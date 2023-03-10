@@ -183,7 +183,7 @@ class Utility
                 $file['item_image']['name']
             );
 
-            $result = (array) self::uploadToServer($_FILE, $data['item_code'], $dir, $imageFileType);            
+            $result = (array) self::uploadToServer($_FILE, $data['item_code'], $dir, $imageFileType, "items");            
             if ($result['statuscode'] == 200) {
                 $response = [
                     'status' => $result['status'], 
@@ -268,7 +268,7 @@ class Utility
                 $file['profile_photo']['name']
             );
 
-            $result = self::uploadToServer($_FILE, $data['id'], $dir, $imageFileType);
+            $result = self::uploadToServer($_FILE, $data['id'], $dir, $imageFileType, "profile");
             die(var_dump($result));
             if ($result) {
                 $response = [
@@ -317,20 +317,20 @@ class Utility
      * 
      * @return mix
      */
-    public static function uploadToServer(object $file, string $data, string $dir, array $imageFileType)
+    public static function uploadToServer(object $file, string $data, string $dir, array $imageFileType, String $action)
     {
         $curl = curl_init();
         $remoteData = array(
             'data' => $data,
             'dir' => $dir,
             'imageFileType' => $imageFileType[1],
-            'action' => 'items',
+            'action' => $action,
             'file' => $file
         );
      
-        curl_setopt($curl, CURLOPT_URL, "https://gokolecttest.bootqlass.com/files/");
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_URL, "https://gokolecttest.bootqlass.com/server/");
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 1);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $remoteData);

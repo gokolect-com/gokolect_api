@@ -192,39 +192,43 @@ class UsersDal extends DataOps
         $verify_jwt = self::$_utility->decodeJWTToken($item[3]);
 
         $response = array();
-
-        if (self::getConnection()) {
-                                           
-            $dir = '/user_profiles';
-            if (self::$_input_data['update_type'] == 'details') {
-                $upload = self::$_utility->uploadImg(self::$_input_data, self::$_input_file, $dir);
-            } else {
-                $upload['statuscode'] = 200;
-            }
-            
-            if ($upload['statuscode'] === 200) {
-                self::$_input_data['id'] = $verify_jwt->userName;
-                self::$_input_data['modified'] = date('now');
-                unset(self::$_input_data['update_type']);
-
-                if (!empty(self::$_input_file)) {
-                    self::$_input_data['profile_photo'] = $upload['filename'];
-                    self::$_input_data['profile_path'] = $upload['target_dir'];
-                    unset(self::$_input_data['avatar_remove']);
-                }                
-                $result = self::update(self::$_input_data);
-
-                if ($result) {
-                    $response = ['statuscode' => 0, 'status' => 'Profile updated successfully'];
+        if ($verify_jwt->valid) {
+            $get_maggie = base64_decode($verify_jwt->maggie);
+            if (self::getConnection()) {
+                $my_dir = self::$input_data["last_name"].self::$input_data["first_name"].$get_maggie;                            
+                $dir = "/user_profiles".DIRECTORY_SEPARATOR.$my_dir;
+                if (self::$_input_data['update_type'] == 'details') {
+                    $upload = self::$_utility->uploadImg(self::$_input_data, self::$_input_file, $dir);
                 } else {
-                    $response = ['statuscode' => -1, 'status' => 'Profile update failed'];
+                    $upload['statuscode'] = 200;
                 }
+                
+                if ($upload['statuscode'] === 200) {
+                    self::$_input_data['id'] = $verify_jwt->userName;
+                    self::$_input_data['modified'] = date('now');
+                    unset(self::$_input_data['update_type']);
+
+                    if (!empty(self::$_input_file)) {
+                        self::$_input_data['profile_photo'] = $upload['filename'];
+                        self::$_input_data['profile_path'] = $upload['target_dir'];
+                        unset(self::$_input_data['avatar_remove']);
+                    }                
+                    $result = self::update(self::$_input_data);
+
+                    if ($result) {
+                        $response = ['statuscode' => 0, 'status' => 'Profile updated successfully'];
+                    } else {
+                        $response = ['statuscode' => -1, 'status' => 'Profile update failed'];
+                    }
+                } else {
+                    $response = ['statuscode' => -1, 'status' => "Unable to upload profile picture"];
+                }            
             } else {
-                $response = ['statuscode' => -1, 'status' => "Unable to upload profile picture"];
-            }            
+                $response = ['statuscode' => -1, 'status' => "Connection error"];
+            } 
         } else {
-            $response = ['statuscode' => -1, 'status' => "Connection error"];
-        }        
+            $response = ['statuscode' => -1, 'status' => "Your session has expired"];
+        }       
         return $response;
     }
 
