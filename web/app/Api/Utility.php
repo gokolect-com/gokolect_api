@@ -111,7 +111,7 @@ class Utility
     private static function _dirt($dir)
     {
         $new_dir = str_replace(' ', '', $dir);
-        $applpicsdir = 'http://localhost/gokolect_fileserver/app_files/';
+        $applpicsdir = 'http://gokolecttest.bootqlass.com/gokolect_fileserver/';
 
         if (!is_dir($applpicsdir)) {
             $applpicsdir = "file_server/app_files/";
@@ -217,7 +217,7 @@ class Utility
         $target_dir = strtolower($target_dirt.DIRECTORY_SEPARATOR.strtolower(str_replace(' ', '', $dir)). DIRECTORY_SEPARATOR);
         $uploadOk = 1;
         $imageFileType = explode("/", $file['profile_photo']["type"]);
-        $name = "gkpf". $dt .$data['id'];
+        $name = uniqid("gkpf")."_".$dt;
         $filename = str_replace(' ', '', $name).".".$imageFileType[1];
         $target_file = strtolower($target_dir . str_replace(' ', '', $name).".".$imageFileType[1]);
         $check = explode("/", $file['profile_photo']["type"]);
@@ -327,7 +327,7 @@ class Utility
             'file' => $file
         );
      
-        curl_setopt($curl, CURLOPT_URL, "https://chipber.com/files/");
+        curl_setopt($curl, CURLOPT_URL, "https://gokolecttest.bootqlass.com/files/");
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -352,7 +352,7 @@ class Utility
      */
     public static function getUploadedImagesFromServer($dir, $theFile) 
     {                     
-        $url = "https://chipber.com/files/file_server$dir/$theFile";
+        $url = "https://gokolecttest.bootqlass.com/files/file_server$dir/$theFile";
         
         if (empty(@file_get_contents($url)) || @file_get_contents($url) === false) {
             $response = ['statuscode' => 404, 'photo' => "N/A "];
@@ -379,7 +379,7 @@ class Utility
         // if (substr($dirt, -1) != "/") {
         //     $dirt .= "/";
         // } 
-        $dirt = "https://chipber.com/files/file_server/$dir";
+        $dirt = "https://gokolecttest.bootqlass.com/files/file_server/$dir";
         
         // if (is_dir($dirt.=$dir)) {                            
         if (is_dir($dirt)) {                            
