@@ -98,8 +98,8 @@ class Utility
 
             $response =$mail->send();
             
-        } catch (Exception $e) {
-            $response = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        } catch (Exception $exc) {
+            $response = $exc;
         }
         return json_encode($response);
     }
