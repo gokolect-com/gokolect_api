@@ -111,10 +111,10 @@ class Utility
     private static function _dirt($dir)
     {
         $new_dir = str_replace(' ', '', $dir);
-        $applpicsdir = 'http://gokolecttest.bootqlass.com/server/file_server/';
+        $applpicsdir = 'https://gokolecttest.bootqlass.com/server/file_server/';
 
         if (!is_dir($applpicsdir)) {
-            $applpicsdir = "http://gokolecttest.bootqlass.com/server/file_server/";
+            $applpicsdir = "https://gokolecttest.bootqlass.com/server/file_server/";
         } else {
             $applpicsdir = (is_link($applpicsdir)?readlink($applpicsdir):$applpicsdir)."/{$_SERVER['HTTP_HOST']}/{$new_dir}";
         }
