@@ -47,6 +47,7 @@ function usersRouter(array $data = null)
         break;    
         
     case "update_profile_users":
+        die(var_dump($data, $file));
         $response = $user_object->updateUserProfile();
         break;    
         
