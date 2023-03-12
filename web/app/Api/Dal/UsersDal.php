@@ -178,18 +178,19 @@ class UsersDal extends DataOps
         $upload = null;
         
         if (empty($_SERVER['HTTP_AUTHORIZATION']) || ! preg_match('/Bearer\s(\S+)/', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
-            exit(header(self::BAD_REQUEST));
+            exit(header(self::BAD_REQUEST));           
         }
         
         $jwt = $matches[1];
-    
+
         if (empty($matches) || empty($jwt)) {
             exit(header(self::BAD_REQUEST));
         }
+
         $item = explode('_', base64_decode($jwt));
         
-        $verify_jwt = $this->_utility->decodeJWTToken($item[3], $item[0]);
-        
+        $verify_jwt = self::$_utility->decodeJWTToken($item[3], $item[0]);
+       
         $response = array();
         if ($verify_jwt->valid) {
             $get_maggie = base64_decode($verify_jwt->maggie);
