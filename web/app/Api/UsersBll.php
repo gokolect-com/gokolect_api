@@ -102,8 +102,7 @@ class UsersBll
      */
     public function updateUserProfile()
     {
-        $validated = null;
-        die(var_dump(self::$input_data));
+        $validated = null;        
         if (self::$_input_data['update_type'] === 'details') {
             $validated = $this->_validateProfileData(self::$_input_data);
         } else if (self::$_input_data['update_type'] === 'social_media') {
