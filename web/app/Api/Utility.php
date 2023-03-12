@@ -337,7 +337,7 @@ class Utility
 
         $response = (array) json_decode(curl_exec($curl));
         curl_close($curl); 
-        die(var_dump($response));
+        
         if (!$curl) {
             $response = ['statuscode' -1, 'status' => curl_error($curl) . curl_errno($curl)];
         }
