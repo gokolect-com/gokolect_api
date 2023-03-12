@@ -329,7 +329,7 @@ class Utility
         );
      
         curl_setopt($curl, CURLOPT_URL, "https://gokolecttest.bootqlass.com/server/");
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 1);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_POST, true);
