@@ -217,7 +217,7 @@ class Utility
         $target_dir = strtolower($target_dirt.DIRECTORY_SEPARATOR.strtolower(str_replace(' ', '', $dir)). DIRECTORY_SEPARATOR);
         $uploadOk = 1;
         $imageFileType = explode("/", $file['profile_photo']["type"]);
-        die(var_dump($data, $file, $dir));
+        
         $name = uniqid("gkpf")."_".$dt;
         $filename = str_replace(' ', '', $name).".".$imageFileType[1];
         $target_file = strtolower($target_dir . str_replace(' ', '', $name).".".$imageFileType[1]);
