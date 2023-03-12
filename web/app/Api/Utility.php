@@ -215,10 +215,9 @@ class Utility
     {                       
         $target_dirt = self::_dirt($dir);
         $dt = strtotime('now');
-        $target_dir = strtolower($target_dirt.DIRECTORY_SEPARATOR.strtolower(str_replace(' ', '', $dir)). DIRECTORY_SEPARATOR);
+        $target_dir = strtolower($target_dirt.strtolower(str_replace(' ', '', $dir)). DIRECTORY_SEPARATOR);
         $uploadOk = 1;
         $imageFileType = explode("/", $file['profile_photo']["type"]);
-        die(var_dump($target_dir));
         $name = uniqid("gkpf")."_".$dt;
         $filename = str_replace(' ', '', $name).".".$imageFileType[1];
         $target_file = strtolower($target_dir . str_replace(' ', '', $name).".".$imageFileType[1]);
@@ -226,6 +225,7 @@ class Utility
         if (!is_dir($target_dir)) {
             mkdir($target_dir, 0777, true); 
         } 
+        die(var_dump($target_dir));
 
         if (empty($file['profile_photo']["tmp_name"]) || $file['profile_photo']["error"] > 0 ) {
             $uploadOk = ['status' => 'Please Select a profile image to upload.', 'statuscode' => -1];
