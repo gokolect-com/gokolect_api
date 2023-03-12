@@ -190,7 +190,7 @@ class UsersDal extends DataOps
         $item = explode('_', base64_decode($jwt));
         
         $verify_jwt = self::$_utility->decodeJWTToken($item[3]);
-
+        die(var_dump($verify_jwt));
         $response = array();
         if ($verify_jwt->valid) {
             $get_maggie = base64_decode($verify_jwt->maggie);
