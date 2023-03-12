@@ -221,7 +221,7 @@ class Utility
         $filename = str_replace(' ', '', $name).".".$imageFileType[1];
         $target_file = strtolower($target_dir . str_replace(' ', '', $name).".".$imageFileType[1]);
         $check = explode("/", $file['profile_photo']["type"]);
-        
+        die(var_dump($data, $file, $dir, $check));
         if (!is_dir($target_dir)) {
             mkdir($target_dir, 0777, true); 
         } 
