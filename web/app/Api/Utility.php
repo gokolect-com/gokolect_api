@@ -111,7 +111,7 @@ class Utility
     private static function _dirt($dir)
     {
         $new_dir = str_replace(' ', '', $dir);
-        $applpicsdir = 'http://gokolecttest.bootqlass.com/server/';
+        $applpicsdir = 'http://gokolecttest.bootqlass.com/server/file_server/';
 
         if (!is_dir($applpicsdir)) {
             $applpicsdir = "file_server/";
