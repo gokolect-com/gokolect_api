@@ -114,7 +114,7 @@ class Utility
         $applpicsdir = 'http://gokolecttest.bootqlass.com/server/';
 
         if (!is_dir($applpicsdir)) {
-            $applpicsdir = "file_server/app_files/";
+            $applpicsdir = "file_server/";
         } else {
             $applpicsdir = (is_link($applpicsdir)?readlink($applpicsdir):$applpicsdir)."/{$_SERVER['HTTP_HOST']}/{$new_dir}";
         }
@@ -354,7 +354,7 @@ class Utility
      */
     public static function getUploadedImagesFromServer($dir, $theFile) 
     {                     
-        $url = "https://gokolecttest.bootqlass.com/files/file_server$dir/$theFile";
+        $url = "https://gokolecttest.bootqlass.com/server/file_server$dir/$theFile";
         
         if (empty(@file_get_contents($url)) || @file_get_contents($url) === false) {
             $response = ['statuscode' => 404, 'photo' => "N/A "];
