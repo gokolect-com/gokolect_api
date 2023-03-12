@@ -269,7 +269,7 @@ class Utility
             );
 
             $result = self::uploadToServer($_FILE, $data['id'], $dir, $imageFileType, "profile");
-            
+            die(var_dump($result));
             if ($result) {
                 $response = [
                     'status' => $result['status'], 
