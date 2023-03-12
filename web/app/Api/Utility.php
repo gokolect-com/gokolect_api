@@ -114,7 +114,7 @@ class Utility
         $applpicsdir = 'http://gokolecttest.bootqlass.com/server/file_server/';
 
         if (!is_dir($applpicsdir)) {
-            $applpicsdir = "file_server/";
+            $applpicsdir = "http://gokolecttest.bootqlass.com/server/file_server/";
         } else {
             $applpicsdir = (is_link($applpicsdir)?readlink($applpicsdir):$applpicsdir)."/{$_SERVER['HTTP_HOST']}/{$new_dir}";
         }
