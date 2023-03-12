@@ -215,7 +215,7 @@ class Utility
     {                       
         $target_dirt = self::_dirt($dir);
         $dt = strtotime('now');
-        $target_dir = strtolower($target_dirt.DIRECTORY_SEPARATOR.strtolower(str_replace(' ', '', $dir)). DIRECTORY_SEPARATOR);
+        $target_dir = strtolower($target_dirt.strtolower(str_replace(' ', '', $dir)). DIRECTORY_SEPARATOR);
         $uploadOk = 1;
         $imageFileType = explode("/", $file['profile_photo']["type"]);
         die(var_dump($target_dir));
