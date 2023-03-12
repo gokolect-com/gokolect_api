@@ -111,10 +111,10 @@ class Utility
     private static function _dirt($dir)
     {
         $new_dir = str_replace(' ', '', $dir);
-        $applpicsdir = 'https://gokolecttest.bootqlass.com/server/file_server';
+        $applpicsdir = 'file_server';
 
         if (!is_dir($applpicsdir)) {
-            $applpicsdir = "https://gokolecttest.bootqlass.com/server/file_server";
+            $applpicsdir = "file_server";
         } else {
             $applpicsdir = (is_link($applpicsdir)?readlink($applpicsdir):$applpicsdir)."/{$_SERVER['HTTP_HOST']}/{$new_dir}";
         }
@@ -225,7 +225,7 @@ class Utility
         if (!is_dir($target_dir)) {
             mkdir($target_dir, 0777, true); 
         } 
-        die(var_dump($target_dir));
+        
 
         if (empty($file['profile_photo']["tmp_name"]) || $file['profile_photo']["error"] > 0 ) {
             $uploadOk = ['status' => 'Please Select a profile image to upload.', 'statuscode' => -1];
@@ -355,7 +355,7 @@ class Utility
      */
     public static function getUploadedImagesFromServer($dir, $theFile) 
     {                     
-        $url = "https://gokolecttest.bootqlass.com/server/file_server$dir/$theFile";
+        $url = "https://gokolecttest.bootqlass.com/server/$dir/$theFile";
         
         if (empty(@file_get_contents($url)) || @file_get_contents($url) === false) {
             $response = ['statuscode' => 404, 'photo' => "N/A "];
