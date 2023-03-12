@@ -111,7 +111,7 @@ class Utility
     private static function _dirt($dir)
     {
         $new_dir = str_replace(' ', '', $dir);
-        $applpicsdir = 'https://gokolecttest.bootqlass.com/server/file_server/';
+        $applpicsdir = 'https://gokolecttest.bootqlass.com/server/file_server';
 
         if (!is_dir($applpicsdir)) {
             $applpicsdir = "https://gokolecttest.bootqlass.com/server/file_server/";
@@ -218,7 +218,7 @@ class Utility
         $target_dir = strtolower($target_dirt.DIRECTORY_SEPARATOR.strtolower(str_replace(' ', '', $dir)). DIRECTORY_SEPARATOR);
         $uploadOk = 1;
         $imageFileType = explode("/", $file['profile_photo']["type"]);
-        die(var_dump($target_dirt));
+        die(var_dump($target_dir));
         $name = uniqid("gkpf")."_".$dt;
         $filename = str_replace(' ', '', $name).".".$imageFileType[1];
         $target_file = strtolower($target_dir . str_replace(' ', '', $name).".".$imageFileType[1]);
