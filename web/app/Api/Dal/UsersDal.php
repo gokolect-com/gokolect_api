@@ -195,7 +195,7 @@ class UsersDal extends DataOps
         if ($verify_jwt->valid) {
             $get_maggie = base64_decode($verify_jwt->maggie);
             if (self::getConnection()) {
-                $my_dir = self::$input_data["last_name"].self::$input_data["first_name"].$get_maggie;                            
+                $my_dir = self::$_input_data["last_name"].self::$_input_data["first_name"].$get_maggie;                            
                 $dir = "/user_profiles".DIRECTORY_SEPARATOR.$my_dir;
                 if (self::$_input_data['update_type'] == 'details') {
                     $upload = self::$_utility->uploadImg(self::$_input_data, self::$_input_file, $dir);
