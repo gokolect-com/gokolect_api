@@ -269,7 +269,7 @@ class Utility
             );
 
             $result = self::uploadToServer($_FILE, $data['id'], $dir, $imageFileType, "profile");
-            die(var_dump($result));
+            
             if ($result) {
                 $response = [
                     'status' => $result['status'], 
@@ -337,6 +337,7 @@ class Utility
 
         $response = (array) json_decode(curl_exec($curl));
         curl_close($curl); 
+        die(var_dump($response));
         if (!$curl) {
             $response = ['statuscode' -1, 'status' => curl_error($curl) . curl_errno($curl)];
         }
@@ -385,7 +386,7 @@ class Utility
         // if (is_dir($dirt.=$dir)) {                            
         if (is_dir($dirt)) {                            
             if ($handle = opendir($dirt)) {
-                die(var_dump($dirt."/".$theFile));
+                // die(var_dump($dirt."/".$theFile));
                 while (false !== ($file = readdir($handle))) {                
                     if ($file !== "." && $file !== "..") {
                         $imgfile = file_get_contents($dirt."/".$theFile);
