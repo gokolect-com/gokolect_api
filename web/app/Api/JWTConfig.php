@@ -5,7 +5,7 @@ $domainName = rawurldecode(parse_url($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI
 
 $date = new DateTimeImmutable();
 $expire_at = $date->modify('+1440 minutes')->getTimestamp();      // Add 60 seconds
-$expire_at = strtotime('+1 day', strtotime('now'));
+$expire_at1 = strtotime('+1 day', strtotime('now'));
 
 $service_id = "0oa5l8n9qxwPpMbTN5d7"; // Retrieved from filtered POST data
 $JwtData = [
