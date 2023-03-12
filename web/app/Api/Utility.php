@@ -138,6 +138,7 @@ class Utility
         $response = null;
         $dt = strtotime(date('Ymd'));
         $target_dirt = self::_dirt($dir);
+        die(var_dump($target_dirt));
         $target_dir = strtolower($target_dirt.DIRECTORY_SEPARATOR.str_replace(' ', '', $dir).DIRECTORY_SEPARATOR);
         $uploadOk = null;
         $imageFileType = explode("/", $file['item_image']["type"]);
@@ -269,7 +270,7 @@ class Utility
             );
 
             $result = self::uploadToServer($_FILE, $data['id'], $dir, $imageFileType, "profile");
-            die(var_dump($result));
+            
             if ($result) {
                 $response = [
                     'status' => $result['status'], 
@@ -381,12 +382,11 @@ class Utility
         // if (substr($dirt, -1) != "/") {
         //     $dirt .= "/";
         // } 
-        $dirt = "https://gokolecttest.bootqlass.com/files/file_server/$dir";
+        $dirt = "https://gokolecttest.bootqlass.com/server/file_server/$dir";
         
         // if (is_dir($dirt.=$dir)) {                            
         if (is_dir($dirt)) {                            
             if ($handle = opendir($dirt)) {
-                // die(var_dump($dirt."/".$theFile));
                 while (false !== ($file = readdir($handle))) {                
                     if ($file !== "." && $file !== "..") {
                         $imgfile = file_get_contents($dirt."/".$theFile);
