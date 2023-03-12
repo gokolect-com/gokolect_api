@@ -114,12 +114,12 @@ class Utility
         $applpicsdir = 'https://gokolecttest.bootqlass.com/server/file_server';
 
         if (!is_dir($applpicsdir)) {
-            $applpicsdir = "https://gokolecttest.bootqlass.com/server/file_server/";
+            $applpicsdir = "https://gokolecttest.bootqlass.com/server/file_server";
         } else {
             $applpicsdir = (is_link($applpicsdir)?readlink($applpicsdir):$applpicsdir)."/{$_SERVER['HTTP_HOST']}/{$new_dir}";
         }
 
-        $user_dir = self::_getRelativePath("$applpicsdir/");
+        $user_dir = self::_getRelativePath("$applpicsdir");
 
         return $user_dir = (is_link($user_dir)?readlink($user_dir):$user_dir);
     }
