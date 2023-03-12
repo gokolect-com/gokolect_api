@@ -198,7 +198,11 @@ class UsersDal extends DataOps
                 $my_dir = str_replace(' ', '',self::$_input_data["last_name"].self::$_input_data["first_name"].$get_maggie);                            
                 $dir = "/user_profiles".DIRECTORY_SEPARATOR.$my_dir;
                 if (self::$_input_data['update_type'] == 'details') {
-                    $upload = self::$_utility->uploadImg(self::$_input_data, self::$_input_file, $dir);
+                    if (!empty(self::$_input_file['profile_photo']['type']) || !empty(self::$_input_file['profile_photo']['name']) || !empty(self::$_input_file['profile_photo']['tmp_name'])) {
+                        $upload = self::$_utility->uploadImg(self::$_input_data, self::$_input_file, $dir);
+                    } else {
+                        $upload['statuscode'] = 200;
+                    }
                 } else {
                     $upload['statuscode'] = 200;
                 }
