@@ -213,20 +213,20 @@ class Utility
      */
     public static function uploadImg($data, $file, $dir)
     {                       
-        $target_dirt = self::_dirt($dir);
         $dt = strtotime('now');
-        $target_dir = strtolower($target_dirt.strtolower(str_replace(' ', '', $dir)). DIRECTORY_SEPARATOR);
+        $target_dir = strtolower(str_replace(' ', '', $dir)). DIRECTORY_SEPARATOR;
         $uploadOk = 1;
-        $imageFileType = explode("/", $file['profile_photo']["type"]);
-        $name = uniqid("gkpf")."_".$dt;
-        $filename = str_replace(' ', '', $name).".".$imageFileType[1];
-        $target_file = strtolower($target_dir . str_replace(' ', '', $name).".".$imageFileType[1]);
-        $check = explode("/", $file['profile_photo']["type"]);
-        if (!is_dir($target_dir)) {
-            mkdir($target_dir, 0777, true); 
-        } 
-        
 
+        $imageFileType = explode("/", $file['profile_photo']["type"]);
+
+        $name = uniqid("gkpf")."_".$dt;
+
+        $filename = str_replace(' ', '', $name).".".$imageFileType[1];
+
+        $target_file = strtolower($target_dir . str_replace(' ', '', $name).".".$imageFileType[1]);
+
+        $check = explode("/", $file['profile_photo']["type"]);
+               
         if (empty($file['profile_photo']["tmp_name"]) || $file['profile_photo']["error"] > 0 ) {
             $uploadOk = ['status' => 'Please Select a profile image to upload.', 'statuscode' => -1];
         } else {
@@ -262,27 +262,23 @@ class Utility
         if ($uploadOk != 1) {
             $response = ['status' => true, 'statuscode' => $uploadOk];
         } else {
-
             $_FILE = new  \CURLFile(
                 $file['profile_photo']['tmp_name'], 
                 $file['profile_photo']['type'], 
                 $file['profile_photo']['name']
             );
 
-            $result = self::uploadToServer($_FILE, $data['id'], $dir, $imageFileType, "profile");
-            die(var_dump($result));
-            if ($result) {
+            $result = self::uploadToServer($_FILE, $data['id'], $target_file, $imageFileType, "profile");
+            
+            if (array_key_exists[$result["statuscode"]] && $result["statuscode"] == -1) {
+                $response = $result;   
+            } else {
                 $response = [
                     'status' => $result['status'], 
                     'statuscode' => $result['statuscode'], 
                     'filename' =>$result['filename'], 
                     'target_dir' => $dir
                 ];
-            } else {
-                $response = [
-                    'status' => "Unable to upload the image " . $result['status'],  
-                    'statuscode' => -1
-                ];   
             }
         }
         return $response;        
