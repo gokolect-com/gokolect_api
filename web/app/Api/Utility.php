@@ -323,18 +323,18 @@ class Utility
             'action' => $action,
             'file' => $file
         );
-     
+        die(var_dump($remoteData));
         curl_setopt($curl, CURLOPT_URL, "https://gokolecttest.bootqlass.com/server/");
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $remoteData);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         $response = (array) json_decode(curl_exec($curl));
-        die(var_dump($response));
-        curl_close($curl); 
         
-        if (!$curl) {
-            $response = ['statuscode' -1, 'status' => curl_error($curl) . curl_errno($curl)];
+        $error = curl_error($curl);
+        if ($error) {
+            $response = ['statuscode' -1, 'status' => $error];
         }
+        curl_close($curl); 
         return $response;
     } 
 
