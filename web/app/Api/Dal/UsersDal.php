@@ -206,7 +206,7 @@ class UsersDal extends DataOps
                 } else {
                     $upload['statuscode'] = 200;
                 }
-                
+                die(var_dump($upload));
                 if ($upload['statuscode'] === 200) {
                     self::$_input_data['id'] = $verify_jwt->userName;
                     self::$_input_data['modified'] = date('now');
