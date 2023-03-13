@@ -198,7 +198,7 @@ class UsersDal extends DataOps
                 $my_dir = str_replace(' ', '',self::$_input_data["last_name"].self::$_input_data["first_name"].$get_maggie);                            
                 $dir = "/user_profiles".DIRECTORY_SEPARATOR.$my_dir;
                 if (self::$_input_data['update_type'] == 'details') {
-                    if (!empty(self::$_input_file['profile_photo']['type']) || !empty(self::$_input_file['profile_photo']['name']) || !empty(self::$_input_file['profile_photo']['tmp_name'])) {
+                    if (!empty(self::$_input_file['profile_photo']['type']) || !empty(self::$_input_file['profile_photo']['name']) || !empty(!self::$_input_file['profile_photo']['tmp_name'])) {
                         $upload = self::$_utility->uploadImg(self::$_input_data, self::$_input_file, $dir);
                     } else {
                         $upload['statuscode'] = 200;
@@ -212,7 +212,7 @@ class UsersDal extends DataOps
                     self::$_input_data['modified'] = date('now');
                     unset(self::$_input_data['update_type']);
 
-                    if (!empty(self::$_input_file)) {
+                    if (!empty(self::$_input_file['profile_photo']['type']) || !empty(self::$_input_file['profile_photo']['name']) || !empty(!self::$_input_file['profile_photo']['tmp_name'])) {
                         self::$_input_data['profile_photo'] = $upload['filename'];
                         self::$_input_data['profile_path'] = $upload['target_dir'];
                         unset(self::$_input_data['avatar_remove']);

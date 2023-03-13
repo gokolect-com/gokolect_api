@@ -25,3 +25,10 @@ define("PUBLIC_KEY", $public_key);
 define("SERVICE_ID", $service_id);
 define("DOMAIN_NAME", $domainName);
 define("NOW_DATE", $date);
+
+define("MAIL_DRIVER", getenv("MAIL_DRIVER"));
+define("MAIL_HOST", getenv("MAIL_HOST"));
+define("MAIL_PORT", getenv("MAIL_PORT"));
+define("MAIL_USERNAME", getenv("MAIL_USERNAME"));
+define("MAIL_PASSWORD", getenv("MAIL_PASSWORD"));
+define("MAIL_REPLY_TO", getenv("MAIL_REPLY_TO"));
