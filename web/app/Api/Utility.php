@@ -270,7 +270,7 @@ class Utility
 
             $result = self::uploadToServer($_FILE, $data['id'], $target_file, $imageFileType, "profile");
             
-            if (array_key_exists[$result["statuscode"]] && $result["statuscode"] == -1) {
+            if (array_key_exists($result["statuscode"]) && $result["statuscode"] == -1) {
                 $response = $result;   
             } else {
                 $response = [
