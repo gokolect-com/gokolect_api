@@ -328,7 +328,7 @@ class Utility
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $remoteData);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
+        die(var_dump($curl));
         $response = (array) json_decode(curl_exec($curl));
         curl_close($curl); 
         
